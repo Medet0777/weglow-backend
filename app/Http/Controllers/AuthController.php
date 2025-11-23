@@ -6,7 +6,6 @@ use App\Contracts\Services\AuthServiceContract;
 use App\Http\Requests\Auth\CreateRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\EmailRequest;
-use App\Http\Requests\Auth\PasswordResetRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
 
