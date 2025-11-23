@@ -46,9 +46,9 @@ interface AuthServiceContract
     public function verifyOtp(VerifyRequest $request): JsonResponse;
 
     /**
-     * @param PasswordResetRequest $request
+     * @param CreateRequest $request
      *
      * @return JsonResponse
      */
-    public function resetPassword(PasswordResetRequest $request): JsonResponse;
+    public function resetPassword(CreateRequest $request): JsonResponse;
 }

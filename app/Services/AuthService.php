@@ -145,7 +145,7 @@ class AuthService implements AuthServiceContract
         ]);
     }
 
-    public function resetPassword(PasswordResetRequest $request): JsonResponse
+    public function resetPassword(CreateRequest $request): JsonResponse
     {
         $user = Repository::user()->getOneByEmail($request->get('email'));
 

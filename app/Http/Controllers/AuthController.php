@@ -69,12 +69,12 @@ class AuthController extends Controller
     }
 
     /**
-     * @param PasswordResetRequest $request
+     * @param CreateRequest $request
      * @param AuthServiceContract $service
      *
      * @return JsonResponse
      */
-    public function resetPassword(PasswordResetRequest $request, AuthServiceContract $service): JsonResponse
+    public function resetPassword(CreateRequest $request, AuthServiceContract $service): JsonResponse
     {
         return $service->resetPassword($request);
     }
