@@ -3,6 +3,8 @@
 namespace App\Contracts\Services;
 use App\Http\Requests\Auth\CreateRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\PasswordResetRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -28,4 +30,25 @@ interface AuthServiceContract
      * @return JsonResponse
      */
     public function login(LoginRequest $request): JsonResponse;
+
+    /**
+     * @param EmailRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function sendOtpForPasswordReset(EmailRequest $request): JsonResponse;
+
+    /**
+     * @param VerifyRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function verifyOtp(VerifyRequest $request): JsonResponse;
+
+    /**
+     * @param PasswordResetRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function resetPassword(PasswordResetRequest $request): JsonResponse;
 }

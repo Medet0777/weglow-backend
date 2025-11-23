@@ -6,9 +6,12 @@ use App\Contracts\Services\AuthServiceContract;
 use App\Facades\Repository;
 use App\Http\Requests\Auth\CreateRequest;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\EmailRequest;
+use App\Http\Requests\Auth\PasswordResetRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use App\Mail\OtpMail;
 use App\Models\Otp;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +34,7 @@ class AuthService implements AuthServiceContract
             [
                 'otp' => $otpCode,
                 'expires_at' => Carbon::now()->addMinutes(5),
-                'temp_password' => $request->get('password'),
+                'temp_password' => Hash::make($request->get('password')),
             ]
         );
 
@@ -60,7 +63,7 @@ class AuthService implements AuthServiceContract
             [
                 'email' => $record->email,
                 'email_verified_at' => Carbon::now(),
-                'password' => Hash::make($record->temp_password),
+                'password' => $record->temp_password,
             ]
         );
 
@@ -91,6 +94,74 @@ class AuthService implements AuthServiceContract
         return response()->json([
             'message' => 'Login successful',
             'token' => $token,
+        ]);
+    }
+
+    /**
+     * @param EmailRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function sendOtpForPasswordReset(EmailRequest $request): JsonResponse
+    {
+        $otpCode = rand(1000, 9999);
+
+        Otp::updateOrCreate(
+            ['email' => $request->get('email')],
+            [
+                'otp' => $otpCode,
+                'expires_at' => Carbon::now()->addMinutes(5),
+                'temp_password' => null
+            ]
+        );
+
+        Mail::to($request->get('email'))->send(new OtpMail($otpCode));
+
+        return response()->json([
+            'message' => 'OTP sent to your email',
+        ]);
+    }
+
+    /**
+     * @param VerifyRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function verifyOtp(VerifyRequest $request): JsonResponse
+    {
+        $record = Repository::otp()->getOneByOtpCode($request->get('otp'));
+
+        if (!$record) {
+            return response()->json(['message' => 'Invalid or expired OTP'], 422);
+        }
+
+        $email = $record->email;
+
+        $record->delete();
+
+        return response()->json([
+            'message' => 'Successfully verified your OTP',
+            'email' => $email
+        ]);
+    }
+
+    public function resetPassword(PasswordResetRequest $request): JsonResponse
+    {
+        $user = Repository::user()->getOneByEmail($request->get('email'));
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        Repository::user()->updateOne
+            ([
+            'password' => Hash::make($request->get('password')
+            )],
+            $user->id
+        );
+
+        return response()->json([
+            'message' => 'Password reset successfully'
         ]);
     }
 }

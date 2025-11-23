@@ -10,6 +10,7 @@ class Otp extends Model
         'email',
         'otp',
         'expires_at',
+        'temp_password',
     ];
 
     protected array $dates = [

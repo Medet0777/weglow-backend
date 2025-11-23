@@ -34,5 +34,19 @@ class UserRepository implements UserRepositoryContract
             ->where('email', $email)
             ->first();
     }
+
+    /**
+     * @param array $data
+     * @param int $userId
+     *
+     * @return User
+     */
+    public function updateOne(array $data, int $userId): User
+    {
+        $user = User::query()->findOrFail($userId);
+        $user->update($data);
+
+        return $user;
+    }
 }
 
