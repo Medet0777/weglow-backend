@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('email');
             $table->string('otp');
+            $table->string('temp_password')->nullable();
             $table->timestamp('expires_at');
             $table->timestamps();
         });

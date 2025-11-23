@@ -25,15 +25,14 @@ class AuthService implements AuthServiceContract
     {
         $otpCode = rand(1000, 9999);
 
-        Otp::createOrUpdate(
+        Otp::updateOrCreate(
             ['email' => $request->get('email')],
             [
                 'otp' => $otpCode,
-                'expires_at' => Carbon::now()->addMinutes(5)
+                'expires_at' => Carbon::now()->addMinutes(5),
+                'temp_password' => Hash::make($request->get('password')),
             ]
         );
-
-        $request->session()->put('temp_password_'.$request->get('email'), $request->get('password'));
 
         Mail::to($request->get('email'))->send(new OtpMail($otpCode));
 
@@ -56,17 +55,11 @@ class AuthService implements AuthServiceContract
             return response()->json(['message' => 'Invalid or expired OTP'], 422);
         }
 
-        $password = session()->pull('temp_password_'.$record->email);
-
-        if (!$password) {
-            return response()->json(['message' => 'Password not found. Please resend OTP.'], 422);
-        }
-
         $user = Repository::user()->createOne(
             [
                 'email' => $record->email,
                 'email_verified_at' => Carbon::now(),
-                'password' => Hash::make($password),
+                'password' => Hash::make($record->temp_password),
             ]
         );
 

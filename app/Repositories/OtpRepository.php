@@ -15,7 +15,7 @@ class OtpRepository implements OtpRepositoryContract
     public function getOneByOtpCode(string $otpCode): ?Otp
     {
         return Otp::query()
-            ->where('otp_code', $otpCode)
+            ->where('otp', $otpCode)
             ->where('expires_at', '>', now())
             ->first();
     }
