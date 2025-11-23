@@ -62,7 +62,7 @@ class AuthService implements AuthServiceContract
             return response()->json(['message' => 'Password not found. Please resend OTP.'], 422);
         }
 
-        Repository::user()->createOne(
+        $user = Repository::user()->createOne(
             [
                 'email' => $record->email,
                 'email_verified_at' => Carbon::now(),
@@ -71,9 +71,11 @@ class AuthService implements AuthServiceContract
         );
 
         $record->delete();
+        $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
             'message' => 'User registered successfully',
+            'token' => $token
         ]);
     }
 }
