@@ -2,9 +2,14 @@
 
 namespace App\Contracts\Repositories;
 
-use App\Http\Requests\Auth\CreateRequest;
+use App\Models\User;
 
 interface UserRepositoryContract
 {
-    public function createOne(CreateRequest $request);
+    /**
+     * @param array $data
+     *
+     * @return User
+     */
+    public function createOne(array $data): User;
 }

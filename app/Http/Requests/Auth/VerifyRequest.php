@@ -4,7 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRequest extends FormRequest
+class VerifyRequest extends FormRequest
 {
 
     /**
@@ -13,8 +13,7 @@ class CreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'otp' => 'required|digits:4',
         ];
     }
 }
