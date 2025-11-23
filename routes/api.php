@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/auth/send-otp', [AuthController::class, 'sendOtp']);
 Route::post('/auth/verify-and-create', [AuthController::class, 'verifyAndCreate']);
+Route::post('/auth/login', [AuthController::class, 'login']);

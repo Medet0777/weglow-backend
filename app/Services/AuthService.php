@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\Services\AuthServiceContract;
 use App\Facades\Repository;
 use App\Http\Requests\Auth\CreateRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use App\Mail\OtpMail;
 use App\Models\Otp;
@@ -30,7 +31,7 @@ class AuthService implements AuthServiceContract
             [
                 'otp' => $otpCode,
                 'expires_at' => Carbon::now()->addMinutes(5),
-                'temp_password' => Hash::make($request->get('password')),
+                'temp_password' => $request->get('password'),
             ]
         );
 
@@ -69,6 +70,27 @@ class AuthService implements AuthServiceContract
         return response()->json([
             'message' => 'User registered successfully',
             'token' => $token
+        ]);
+    }
+
+    /**
+     * @param LoginRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $user = Repository::user()->getOneByEmail($request->get('email'));
+
+        if (!$user || !Hash::check($request->get('password'), $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'Login successful',
+            'token' => $token,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Contracts\Services;
 use App\Http\Requests\Auth\CreateRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -20,4 +21,11 @@ interface AuthServiceContract
      * @return JsonResponse
      */
     public function verifyAndCreate(VerifyRequest $request): JsonResponse;
+
+    /**
+     * @param LoginRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function login(LoginRequest $request): JsonResponse;
 }

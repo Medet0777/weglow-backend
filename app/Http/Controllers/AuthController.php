@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Services\AuthServiceContract;
 use App\Http\Requests\Auth\CreateRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -30,5 +31,16 @@ class AuthController extends Controller
     public function verifyAndCreate(VerifyRequest $request, AuthServiceContract $service): JsonResponse
     {
         return $service->verifyAndCreate($request);
+    }
+
+    /**
+     * @param LoginRequest $request
+     * @param AuthServiceContract $service
+     *
+     * @return JsonResponse
+     */
+    public function login(LoginRequest $request, AuthServiceContract $service): JsonResponse
+    {
+        return $service->login($request);
     }
 }

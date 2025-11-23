@@ -22,5 +22,17 @@ class UserRepository implements UserRepositoryContract
             'email_verified_at' => $data['email_verified_at'] ?? null,
         ]);
     }
+
+    /**
+     * @param string $email
+     *
+     * @return User|null
+     */
+    public function getOneByEmail(string $email): ?User
+    {
+        return User::query()
+            ->where('email', $email)
+            ->first();
+    }
 }
 
