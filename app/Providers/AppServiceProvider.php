@@ -8,6 +8,7 @@ use App\Contracts\Services\AuthServiceContract;
 use App\Repositories\OtpRepository;
 use App\Repositories\UserRepository;
 use App\Services\AuthService;
+use App\Services\UserProfileService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryContract::class, UserRepository::class);
         $this->app->bind(OtpRepositoryContract::class, OtpRepository::class);
         $this->app->bind(AuthServiceContract::class, AuthService::class);
+        $this->app->bind(UserProfileService::class, UserProfileService::class);
 
 
         // Фасад Service
@@ -34,6 +36,11 @@ class AppServiceProvider extends ServiceProvider
                 public function auth()
                 {
                     return $this->app->make(AuthServiceContract::class);
+                }
+
+                public function user()
+                {
+                    return $this->app->make(UserProfileService::class);
                 }
 
             };
