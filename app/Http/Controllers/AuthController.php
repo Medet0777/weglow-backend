@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -76,5 +77,16 @@ class AuthController extends Controller
     public function resetPassword(CreateRequest $request, AuthServiceContract $service): JsonResponse
     {
         return $service->resetPassword($request);
+    }
+
+    /**
+     * @param Request $request
+     * @param AuthServiceContract $service
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request,AuthServiceContract $service): JsonResponse
+    {
+        return $service->logout($request);
     }
 }

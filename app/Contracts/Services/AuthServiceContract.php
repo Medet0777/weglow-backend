@@ -6,6 +6,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\EmailRequest;
 use App\Http\Requests\Auth\VerifyRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 interface AuthServiceContract
 {
@@ -50,4 +51,11 @@ interface AuthServiceContract
      * @return JsonResponse
      */
     public function resetPassword(CreateRequest $request): JsonResponse;
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse;
 }

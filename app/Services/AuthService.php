@@ -11,6 +11,7 @@ use App\Http\Requests\Auth\VerifyRequest;
 use App\Mail\OtpMail;
 use App\Models\Otp;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -143,6 +144,11 @@ class AuthService implements AuthServiceContract
         ]);
     }
 
+    /**
+     * @param CreateRequest $request
+     *
+     * @return JsonResponse
+     */
     public function resetPassword(CreateRequest $request): JsonResponse
     {
         $user = Repository::user()->getOneByEmail($request->get('email'));
@@ -160,6 +166,20 @@ class AuthService implements AuthServiceContract
 
         return response()->json([
             'message' => 'Password reset successfully'
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message' => 'Logged out successfully'
         ]);
     }
 }
