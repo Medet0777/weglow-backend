@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'finhub' => [
+        'api_key' => env('FINNHUB_API_KEY', ''),
+    ],
+
 ];

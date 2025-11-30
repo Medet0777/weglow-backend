@@ -13,7 +13,12 @@ return new class extends Migration
             $table->id();
             $table->string('symbol')->unique();
             $table->string('name')->nullable();
-            $table->decimal('current_price', 12, 2)->nullable();
+            $table->decimal('current_price', 12)->nullable();
+            $table->decimal('open_price', 12 )->nullable();
+            $table->decimal('high_price', 12)->nullable();
+            $table->decimal('low_price', 12)->nullable();
+            $table->decimal('prev_close_price', 12)->nullable();
+            $table->decimal('volume', 20)->nullable();
             $table->timestamps();
         });
     }
