@@ -2,14 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Stock;
+use App\Services\StockService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    public function index(): JsonResponse
+
+    /**
+     * @param Request $request
+     * @param StockService $service
+     *
+     * @return JsonResponse
+     */
+    public function index(Request $request,StockService $service): JsonResponse
     {
-        $stocks = Stock::select('symbol', 'current_price')->get();
-        return response()->json($stocks);
+        return $service->index($request);
     }
 }
