@@ -11,6 +11,12 @@ class Stock extends Model
         'symbol',
         'name',
         'current_price',
+        'logo_url',
+        'open_price',
+        'high_price',
+        'low_price',
+        'prev_close_price',
+        'volume',
     ];
 
 }

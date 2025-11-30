@@ -57,4 +57,25 @@ class FinhubService implements FinhubServiceContract
             return [];
         }
     }
+
+    /**
+     * @param string $symbol
+     *
+     * @return array
+     * @throws ConnectionException
+     */
+    public function getProfile(string $symbol): array
+    {
+        try {
+            $response = Http::get("https://finnhub.io/api/v1/stock/profile2", [
+                'symbol' => $symbol,
+                'token' => $this->apiKey,
+            ]);
+
+            $response->throw();
+            return $response->json();
+        } catch (RequestException) {
+            return [];
+        }
+    }
 }

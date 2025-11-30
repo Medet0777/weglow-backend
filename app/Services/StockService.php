@@ -20,7 +20,7 @@ class StockService implements StockServiceContract
         $perPage = $request->query('per_page', 20);
         $page = $request->query('page', 1);
 
-        $stocksQuery = Stock::select('symbol', 'name', 'current_price')
+        $stocksQuery = Stock::query()
             ->whereNotNull('current_price')
             ->where('current_price', '>', 0)
             ->orderBy('symbol');

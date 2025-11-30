@@ -31,18 +31,20 @@ class ImportStocks extends Command
         $popularStocks = array_slice($stocksList, 0, 50);
 
         foreach ($popularStocks as $stockData) {
-            if (!isset($stockData['symbol'])) {
-                continue;
-            }
+            if (!isset($stockData['symbol'])) continue;
+
+            $profile = $this->finnhub->getProfile($stockData['symbol']);
+            $logoUrl = $profile['logo'] ?? null;
 
             Stock::updateOrCreate(
                 ['symbol' => $stockData['symbol']],
                 [
                     'name' => $stockData['description'] ?? $stockData['displaySymbol'] ?? null,
                     'current_price' => null,
+                    'logo_url' => $logoUrl,
                 ]
             );
-            $this->info("Added/Updated stock: {$stockData['symbol']}");
+            $this->info("Added/Updated stock: {$stockData['symbol']} (logo: " . ($logoUrl ? 'yes' : 'no') . ")");
         }
 
         $this->info('Stocks import completed!');

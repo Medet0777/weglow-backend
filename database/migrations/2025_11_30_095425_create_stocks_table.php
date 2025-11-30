@@ -13,6 +13,7 @@ return new class extends Migration
             $table->id();
             $table->string('symbol')->unique();
             $table->string('name')->nullable();
+            $table->string('logo_url')->nullable();
             $table->decimal('current_price', 12)->nullable();
             $table->decimal('open_price', 12 )->nullable();
             $table->decimal('high_price', 12)->nullable();
