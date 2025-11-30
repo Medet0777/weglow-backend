@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +15,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('auth/send-password-otp', [AuthController::class, 'sendOtpForPasswordReset']);
 Route::post('auth/verify-otp', [AuthController::class, 'verifyOtp']);
 Route::post('auth/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
+Route::get('user-profile/show', [UserProfileController::class, 'show'])->middleware('auth:sanctum');
+Route::put('user-profile/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');

@@ -19,4 +19,11 @@ interface UserRepositoryContract
      * @return User|null
      */
     public function getOneByEmail(string $email): ?User;
+
+    /**
+     * @param int $id
+     *
+     * @return User|null
+     */
+    public function getOneByIdentifier(int  $id): ?User;
 }

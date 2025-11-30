@@ -48,5 +48,15 @@ class UserRepository implements UserRepositoryContract
 
         return $user;
     }
+
+    /**
+     * @param int $id
+     *
+     * @return User|null
+     */
+    public function getOneByIdentifier(int $id): ?User
+    {
+        return User::query()->findOrFail($id);
+    }
 }
 
