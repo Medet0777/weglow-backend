@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Contracts\Services;
+use App\Http\Requests\UserProfile\UpdateRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 interface UserProfileContract
 {
@@ -10,4 +10,11 @@ interface UserProfileContract
      * @return JsonResponse
      */
     public function show(): JsonResponse;
+
+    /**
+     * @param UpdateRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function update(UpdateRequest $request): JsonResponse;
 }

@@ -19,3 +19,4 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth
 
 
 Route::get('user-profile/show', [UserProfileController::class, 'show'])->middleware('auth:sanctum');
+Route::put('user-profile/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
