@@ -39,4 +39,9 @@ return [
         'api_key' => env('FINNHUB_API_KEY', ''),
     ],
 
+    'huggingface' => [
+        'api_token' => env('HF_API_TOKEN'),
+        'model' => env('HF_MODEL', 'tiiuae/falcon-7b-instruct'),
+    ],
+
 ];
