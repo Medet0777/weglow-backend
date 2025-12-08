@@ -39,9 +39,11 @@ return [
         'api_key' => env('FINNHUB_API_KEY', ''),
     ],
 
-    'huggingface' => [
-        'api_token' => env('HF_API_TOKEN'),
-        'model' => env('HF_MODEL', 'tiiuae/falcon-7b-instruct'),
+    'openrouter' => [
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'base_url' => env('OPENROUTER_BASE_URL', 'https://openrouter.ai/v1'),
+        'model' => env('OPENROUTER_MODEL', 'gpt-4o-mini'),
+        'system_prompt' => env('OPENROUTER_SYSTEM_PROMPT'),
     ],
 
 ];

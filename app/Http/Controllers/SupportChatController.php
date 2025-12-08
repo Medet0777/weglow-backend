@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -11,49 +10,46 @@ class SupportChatController extends Controller
 {
     public function chat(Request $request)
     {
-        // Вопрос приходит из Flutter уже с контекстом
-        $full_prompt = $request->input('question');
+        $message = $request->input('question');
 
-        if (!$full_prompt) {
-            return response()->json(['answer' => 'Пожалуйста, введите вопрос.']);
+        if (!$message) {
+            return response()->json(['answer' => 'Введите вопрос.']);
         }
 
-        // Берем токен и модель из config/services.php
-        $token = config('services.huggingface.api_token');
-        $model = config('services.huggingface.model');
+        $apiKey = config('services.openrouter.api_key');
+        $model = config('services.openrouter.model');
+        $baseUrl = config('services.openrouter.base_url');
+        $systemPrompt = config('services.openrouter.system_prompt');
 
         try {
             $response = Http::withHeaders([
-                'Authorization' => "Bearer $token",
-            ])->post("https://api-inference.huggingface.co/models/$model", [
-                "inputs" => $full_prompt,
-                "parameters" => [
-                    "max_new_tokens" => 200,
+                'Authorization' => "Bearer $apiKey",
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post("$baseUrl/chat/completions", [
+                'model' => $model,
+                'messages' => [
+                    ['role' => 'system', 'content' => $systemPrompt],
+                    ['role' => 'user', 'content' => $message],
                 ],
+                'temperature' => 0.7,
+                'max_tokens' => 500,
             ]);
 
-            $answerData = $response->json();
+            $json = $response->json();
 
-            // Логируем ответ HuggingFace для дебага
-            Log::info('HF Response:', (array) $answerData);
+            // Логируем корректно
+            Log::info("OpenRouter Response:", is_array($json) ? $json : []);
 
-            $text = "Извините, я не смог ответить на ваш вопрос.";
-
-            // Обрабатываем разные структуры ответа
-            if ($response->successful()) {
-                if (is_array($answerData) && isset($answerData[0]['generated_text'])) {
-                    $text = trim($answerData[0]['generated_text']);
-                } elseif (isset($answerData['generated_text'])) {
-                    $text = trim($answerData['generated_text']);
-                }
-            } else {
-                Log::info('HF Full Response:', ['body' => $response->body()]);
+            $answer = 'AI не смог ответить';
+            if (!empty($json['choices']) && !empty($json['choices'][0]['message']['content'])) {
+                $answer = $json['choices'][0]['message']['content'];
             }
 
-            return response()->json(['answer' => $text]);
-        } catch (Exception $e) {
-            Log::error("Support Chat Error: " . $e->getMessage());
-            return response()->json(['answer' => 'Ошибка соединения с AI. Попробуйте позже.']);
+            return response()->json(['answer' => $answer]);
+        } catch (\Exception $e) {
+            Log::error("AI Error: " . $e->getMessage());
+            return response()->json(['answer' => 'Ошибка AI']);
         }
     }
 }
